@@ -1,0 +1,18 @@
+[owner]
+name = "Jorge Costa"
+
+[server]
+port = ":1323"
+
+[database]
+server = "localhost"
+port = 8889
+name = "MeetThe"
+user = "root"
+password = "root"
+
+[sendgrid]
+api_key = "dsada"
+
+[default_properties]
+bundle = "demo.com.pt"

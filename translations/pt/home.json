@@ -1,0 +1,18 @@
+[ 
+    {
+        "locale": "pt",
+        "key": "required",
+        "trans": "O campo de {0} é obrigatório."
+    },
+    {
+        "locale": "pt",
+        "key": "email",
+        "trans": "O campo de {0} não se encontra no formato correcto."
+    },
+    {
+        "locale": "pt",
+        "key": "Application.Error.Unknown",
+        "trans": "Ocorreu um erro inesperado."
+    }
+]
+

@@ -1,0 +1,18 @@
+[owner]
+name = "Jorge Costa"
+
+[server]
+port = ":443"
+
+[database]
+server = "localhost"
+port = 8889
+name = "WineMenu"
+user = "root"
+password = "root"
+
+[sendgrid]
+api_key = "dsada"
+
+[default_properties]
+bundle = "demo.com.pt"
