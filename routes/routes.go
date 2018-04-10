@@ -2,6 +2,7 @@ package routes
 
 import (
 	"api.meet.the/components/config"
+	"api.meet.the/controllers/game"
 	"api.meet.the/controllers/legends"
 	"api.meet.the/controllers/levels"
 	"api.meet.the/controllers/question"
@@ -18,6 +19,7 @@ func SetupRoutes() {
 	g := e.Group("v1/")
 
 	setupGETRoutes(g)
+	setupPUTRoutes(g)
 
 	e.Logger.Fatal(e.Start(config.Data.Server.Port))
 
@@ -28,5 +30,12 @@ func setupGETRoutes(g *echo.Group) {
 	g.GET("levels", levels.GetLevels)
 	g.GET("question", question.GetQuestion)
 	g.GET("legends", legends.GetLegends)
+
+}
+
+func setupPUTRoutes(g *echo.Group) {
+
+	g.PUT("game", game.AddGame)
+	g.PUT("question-result", game.RegisterQuestionResult)
 
 }

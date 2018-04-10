@@ -6,12 +6,13 @@ import (
 )
 
 type Question struct {
-	QuestionID           int      `json:"questionId"`
-	PeopleQuestionID     int      `json:"people_question_id" form:"people_question_id"`
+	QuestionID           int      `json:"questionId,omitempty"`
+	Person               Legend   `json:"legend,omitempty"`
+	PeopleQuestionID     int      `json:"people_question_id,omitempty" form:"people_question_id"`
 	Question             string   `json:"question"`
-	PhotoURL             string   `json:"photo"`
-	ShowImageAtBeginning bool     `json:"showImageAtBeginning"`
-	Answers              []Answer `json:"answers"`
+	PhotoURL             string   `json:"photo,omitempty"`
+	ShowImageAtBeginning bool     `json:"showImageAtBeginning,omitempty"`
+	Answers              []Answer `json:"answers,omitempty"`
 }
 
 func (q *Question) GetQuestion(db *sql.DB) error {
@@ -68,11 +69,17 @@ func (q *Question) GetRandomQuestion(user int, level int, db *sql.DB) error {
 
 }
 
-func (q *Question) GetUnansweredQuestion(user Legend, relatedUser Legend, db *sql.DB) error {
+func (q *Question) GetUnansweredQuestion(questionFail int, db *sql.DB) error {
+
+	err := q.getPeopleFromQuestion(questionFail, db)
+
+	if err != nil {
+		panic(err.Error())
+	}
 
 	var questionsIds []int
 
-	results, err := db.Query("SELECT DISTINCT(q.questionId) FROM PeopleQuestions pq, Questions q WHERE pq.questionId = q.id AND peopleId != ? AND pq.peopleId = ?", user.ID, relatedUser.ID)
+	results, err := db.Query("SELECT DISTINCT(q.id) FROM Questions q LEFT JOIN PeopleQuestions pq ON pq.questionId = q.id WHERE pq.peopleId != ?", q.Person.ID)
 
 	if err != nil {
 		panic(err.Error())
@@ -92,9 +99,9 @@ func (q *Question) GetUnansweredQuestion(user Legend, relatedUser Legend, db *sq
 
 	}
 
-	q.PeopleQuestionID = random(questionsIds)
+	q.QuestionID = random(questionsIds)
 
-	if err := q.GetQuestion(db); err != nil {
+	if err := q.GetQuestionDescription(db); err != nil {
 		panic(err.Error())
 	}
 
@@ -127,6 +134,30 @@ func (q *Question) getAnswers(db *sql.DB) ([]Answer, error) {
 	}
 
 	return answers, nil
+
+}
+
+func (q *Question) getPeopleFromQuestion(question int, db *sql.DB) error {
+
+	err := db.QueryRow("SELECT pq.peopleId, p.name FROM PeopleQuestions pq, People p WHERE pq.peopleId = p.id AND pq.id = ?", question).Scan(&q.Person.ID, &q.Person.Name)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+}
+
+func (q *Question) GetQuestionDescription(db *sql.DB) error {
+
+	err := db.QueryRow("SELECT q.question FROM Questions q WHERE q.id = ?", q.QuestionID).Scan(&q.Question)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 
 }
 
