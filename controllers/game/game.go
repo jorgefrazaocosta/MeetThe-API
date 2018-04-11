@@ -52,7 +52,7 @@ func RegisterQuestionResult(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	err := gt.RegisterGameAnswer(database.DB)
+	result, err := gt.RegisterGameAnswer(database.DB)
 
 	if err != nil {
 
@@ -65,7 +65,7 @@ func RegisterQuestionResult(c echo.Context) error {
 
 	}
 
-	if gt.Result {
+	if result {
 		return response.Success(c, true)
 	}
 

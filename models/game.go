@@ -8,10 +8,10 @@ type Game struct {
 }
 
 type GameTrack struct {
-	GameID           int  `form:"gameId" validate:"required"`
-	PeopleID         int  `form:"peopleId" validate:"required"`
-	PeopleQuestionID int  `form:"peopleQuestionId" validate:"required"`
-	Result           bool `form:"result"`
+	GameID           int `form:"gameId" validate:"required"`
+	PeopleID         int `form:"peopleId" validate:"required"`
+	PeopleQuestionID int `form:"peopleQuestionId" validate:"required"`
+	AnswerID         int `form:"answerId" validate:"required"`
 }
 
 func (g *Game) AddNewGame(db *sql.DB) error {
@@ -30,18 +30,38 @@ func (g *Game) AddNewGame(db *sql.DB) error {
 
 }
 
-func (gt *GameTrack) RegisterGameAnswer(db *sql.DB) error {
+func (gt *GameTrack) RegisterGameAnswer(db *sql.DB) (bool, error) {
+
+	result, err := gt.getAnswerConfirmation(db)
+
+	if err != nil {
+		panic(err.Error())
+	}
 
 	stmt, err := db.Prepare("INSERT INTO GameTrack (gameId, peopleId, peopleQuestionId, result) VALUES (?,?,?,?)")
 	if err != nil {
 		panic(err.Error())
 	}
 
-	_, err = stmt.Exec(gt.GameID, gt.PeopleID, gt.PeopleQuestionID, gt.Result)
+	_, err = stmt.Exec(gt.GameID, gt.PeopleID, gt.PeopleQuestionID, result)
 	if err != nil {
 		panic(err.Error())
 	}
 
-	return nil
+	return result, nil
+
+}
+
+func (gt *GameTrack) getAnswerConfirmation(db *sql.DB) (bool, error) {
+
+	var result = false
+
+	err := db.QueryRow("SELECT isCorrect FROM Answers WHERE id = ?", gt.AnswerID).Scan(&result)
+
+	if err != nil {
+		return result, err
+	}
+
+	return result, nil
 
 }

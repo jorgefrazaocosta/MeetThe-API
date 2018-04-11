@@ -113,7 +113,7 @@ func (q *Question) getAnswers(db *sql.DB) ([]Answer, error) {
 
 	var answers []Answer
 
-	results, err := db.Query("SELECT answer, isCorrect FROM Answers WHERE questionPeopleId = ?", q.PeopleQuestionID)
+	results, err := db.Query("SELECT id, answer FROM Answers WHERE questionPeopleId = ?", q.PeopleQuestionID)
 
 	if err != nil {
 		panic(err.Error())
@@ -123,7 +123,7 @@ func (q *Question) getAnswers(db *sql.DB) ([]Answer, error) {
 
 		var answer Answer
 
-		err = results.Scan(&answer.Answer, &answer.IsCorrect)
+		err = results.Scan(&answer.ID, &answer.Answer)
 
 		if err != nil {
 			panic(err.Error())
