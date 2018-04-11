@@ -17,7 +17,7 @@ type Question struct {
 
 func (q *Question) GetQuestion(db *sql.DB) error {
 
-	err := db.QueryRow("SELECT q.question, i.url, q.showImageAtBeginning FROM Questions q, PeopleQuestions pq, Images i WHERE pq.id = ? AND q.id = pq.id AND pq.photoId = i.id", q.PeopleQuestionID).Scan(&q.Question, &q.PhotoURL, &q.ShowImageAtBeginning)
+	err := db.QueryRow("SELECT q.question, i.url, q.showImageAtBeginning FROM Questions q, PeopleQuestions pq, Images i WHERE pq.id = ? AND q.id = pq.questionId AND pq.photoId = i.id", q.PeopleQuestionID).Scan(&q.Question, &q.PhotoURL, &q.ShowImageAtBeginning)
 
 	if err != nil {
 		return err
