@@ -4,11 +4,41 @@ import (
 	"fmt"
 
 	"github.com/BurntSushi/toml"
-
-	m "api.meet.the/models"
 )
 
-var Data m.TomlConfig
+type tomlConfig struct {
+	Owner             ownerInfo
+	Server            server
+	DB                database `toml:"database"`
+	SendGrid          sendgrid
+	DefaultProperties defaultproperties `toml:"default_properties"`
+}
+
+type server struct {
+	Port string
+}
+
+type ownerInfo struct {
+	Name string
+}
+
+type database struct {
+	Server   string
+	Port     int
+	Name     string
+	User     string
+	Password string
+}
+
+type sendgrid struct {
+	APIKEY string `toml:"api_key"`
+}
+
+type defaultproperties struct {
+	Bundle string
+}
+
+var Data tomlConfig
 
 func init() {
 

@@ -1,8 +1,6 @@
 package models
 
-import (
-	"database/sql"
-)
+import "api.meet.the/components/database"
 
 type Legend struct {
 	ID       int    `json:"legendId" form:"legendId"`
@@ -10,11 +8,11 @@ type Legend struct {
 	PhotoURL string `json:"photo"`
 }
 
-func (p *Legend) GetLegends(db *sql.DB) ([]Legend, error) {
+func (p *Legend) GetLegends() ([]Legend, error) {
 
 	var legends []Legend
 
-	results, err := db.Query("SELECT p.id, p.name, i.url FROM People p, Images i WHERE p.photoID = i.id AND p.active = 1 ORDER BY name ASC")
+	results, err := database.DB.Query("SELECT p.id, p.name, i.url FROM People p, Images i WHERE p.photoID = i.id AND p.active = 1 ORDER BY name ASC")
 	if err != nil {
 		return nil, err
 	}

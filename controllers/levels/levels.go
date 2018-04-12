@@ -3,7 +3,6 @@ package levels
 import (
 	"database/sql"
 
-	"api.meet.the/components/database"
 	"api.meet.the/components/response"
 	model "api.meet.the/models"
 	"github.com/labstack/echo"
@@ -13,7 +12,7 @@ func GetLevels(c echo.Context) error {
 
 	l := model.Level{}
 
-	levels, err := l.GetLevels(database.DB)
+	levels, err := l.GetLevels()
 
 	if err != nil {
 

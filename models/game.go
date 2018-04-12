@@ -1,6 +1,8 @@
 package models
 
-import "database/sql"
+import (
+	"api.meet.the/components/database"
+)
 
 type Game struct {
 	PersonID int `form:"person" query:"person" validate:"required"`
@@ -14,9 +16,9 @@ type GameTrack struct {
 	AnswerID         int `form:"answerId" validate:"required"`
 }
 
-func (g *Game) AddNewGame(db *sql.DB) error {
+func (g *Game) AddNewGame() error {
 
-	stmt, err := db.Prepare("INSERT INTO Games (personId, levelId) VALUES (?, ?)")
+	stmt, err := database.DB.Prepare("INSERT INTO Games (personId, levelId) VALUES (?, ?)")
 	if err != nil {
 		return err
 	}
@@ -30,15 +32,15 @@ func (g *Game) AddNewGame(db *sql.DB) error {
 
 }
 
-func (gt *GameTrack) RegisterGameAnswer(db *sql.DB) (bool, error) {
+func (gt *GameTrack) RegisterGameAnswer() (bool, error) {
 
-	result, err := gt.getAnswerConfirmation(db)
+	result, err := gt.getAnswerConfirmation()
 
 	if err != nil {
 		return false, err
 	}
 
-	stmt, err := db.Prepare("INSERT INTO GameTrack (gameId, peopleId, peopleQuestionId, result) VALUES (?,?,?,?)")
+	stmt, err := database.DB.Prepare("INSERT INTO GameTrack (gameId, peopleId, peopleQuestionId, result) VALUES (?,?,?,?)")
 	if err != nil {
 		return false, err
 	}
@@ -52,11 +54,11 @@ func (gt *GameTrack) RegisterGameAnswer(db *sql.DB) (bool, error) {
 
 }
 
-func (gt *GameTrack) getAnswerConfirmation(db *sql.DB) (bool, error) {
+func (gt *GameTrack) getAnswerConfirmation() (bool, error) {
 
 	var result = false
 
-	err := db.QueryRow("SELECT isCorrect FROM Answers WHERE id = ?", gt.AnswerID).Scan(&result)
+	err := database.DB.QueryRow("SELECT isCorrect FROM Answers WHERE id = ?", gt.AnswerID).Scan(&result)
 
 	if err != nil {
 		return result, err

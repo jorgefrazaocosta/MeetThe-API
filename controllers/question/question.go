@@ -3,7 +3,6 @@ package question
 import (
 	"database/sql"
 
-	"api.meet.the/components/database"
 	"api.meet.the/components/response"
 	"api.meet.the/components/validator"
 	model "api.meet.the/models"
@@ -23,7 +22,7 @@ func GetQuestion(c echo.Context) error {
 		return response.ErrorBadRequestWithKey(c, "Application.Validation.Error")
 	}
 
-	err := q.GetRandomQuestion(g.PersonID, g.Level, database.DB)
+	err := q.GetRandomQuestion(g.PersonID, g.Level)
 
 	if err != nil {
 

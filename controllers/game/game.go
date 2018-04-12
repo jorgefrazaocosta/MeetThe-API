@@ -1,7 +1,6 @@
 package game
 
 import (
-	"api.meet.the/components/database"
 	"api.meet.the/components/response"
 	"api.meet.the/components/validator"
 	model "api.meet.the/models"
@@ -20,7 +19,7 @@ func AddGame(c echo.Context) error {
 		return response.ErrorBadRequestWithKey(c, "Application.Validation.Error")
 	}
 
-	err := g.AddNewGame(database.DB)
+	err := g.AddNewGame()
 
 	if err != nil {
 		return response.ErrorBadRequestWithKey(c, "Add.New.Game.Error")
@@ -42,7 +41,7 @@ func RegisterQuestionResult(c echo.Context) error {
 		return response.ErrorBadRequestWithKey(c, "Application.Validation.Error")
 	}
 
-	result, err := gt.RegisterGameAnswer(database.DB)
+	result, err := gt.RegisterGameAnswer()
 
 	if err != nil {
 		return response.ErrorBadRequestWithKey(c, "Register.User.Response.Error")
@@ -53,7 +52,7 @@ func RegisterQuestionResult(c echo.Context) error {
 	}
 
 	q := new(model.Question)
-	err = q.GetUnansweredQuestion(gt.PeopleQuestionID, database.DB)
+	err = q.GetUnansweredQuestion(gt.PeopleQuestionID)
 
 	if err != nil {
 		return response.ErrorBadRequestWithKey(c, "Get.Unanswered.Question.Error")

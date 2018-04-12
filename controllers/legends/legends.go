@@ -3,7 +3,6 @@ package legends
 import (
 	"database/sql"
 
-	database "api.meet.the/components/database"
 	"api.meet.the/components/response"
 	model "api.meet.the/models"
 
@@ -14,7 +13,7 @@ func GetLegends(c echo.Context) error {
 
 	l := model.Legend{}
 
-	legends, err := l.GetLegends(database.DB)
+	legends, err := l.GetLegends()
 
 	if err != nil {
 

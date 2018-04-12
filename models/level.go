@@ -1,17 +1,17 @@
 package models
 
-import "database/sql"
+import "api.meet.the/components/database"
 
 type Level struct {
 	LevelID     int    `json:"levelId" form:"levelId" binding:"required" validate:"required"`
 	Description string `json:"description"`
 }
 
-func (l *Level) GetLevels(db *sql.DB) ([]Level, error) {
+func (l *Level) GetLevels() ([]Level, error) {
 
 	var levels []Level
 
-	results, err := db.Query("SELECT id, description FROM Levels ORDER BY sort")
+	results, err := database.DB.Query("SELECT id, description FROM Levels ORDER BY sort")
 	if err != nil {
 		return nil, err
 	}
