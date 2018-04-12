@@ -37,5 +37,5 @@ func ErrorKey(c echo.Context, statusCode int, key string) error {
 }
 
 func ErrorBadRequestWithKey(c echo.Context, key string) error {
-	return Error(c, http.StatusBadRequest, key)
+	return ErrorKey(c, http.StatusBadRequest, key)
 }
