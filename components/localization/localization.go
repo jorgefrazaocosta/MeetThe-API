@@ -1,7 +1,6 @@
 package localization
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/go-playground/locales/pt"
@@ -31,8 +30,6 @@ var uni *ut.UniversalTranslator
 var validate *validator.Validate
 
 func T(language string, key interface{}, params ...string) string {
-
-	fmt.Printf("key = %s\n", key)
 
 	trans, _ := uni.GetTranslator(language)
 
