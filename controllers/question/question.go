@@ -2,7 +2,6 @@ package question
 
 import (
 	"database/sql"
-	"net/http"
 
 	"api.meet.the/components/database"
 	"api.meet.the/components/response"
@@ -21,7 +20,7 @@ func GetQuestion(c echo.Context) error {
 	}
 
 	if err := validator.ValidateStruct(c, g); err != nil {
-		return c.JSON(http.StatusBadRequest, err)
+		return response.ErrorBadRequestWithKey(c, "Application.Validation.Error")
 	}
 
 	err := q.GetRandomQuestion(g.PersonID, g.Level, database.DB)
@@ -30,10 +29,10 @@ func GetQuestion(c echo.Context) error {
 
 		switch err {
 		case sql.ErrNoRows:
-			return response.ErrorBadRequestWithKey(c, "User.Error.NotFound")
+			return response.ErrorBadRequestWithKey(c, "SQL.Error.NoRows")
 		}
 
-		return c.JSON(http.StatusBadRequest, err.Error())
+		return response.ErrorBadRequestWithKey(c, "Application.Error.Unknown")
 
 	}
 

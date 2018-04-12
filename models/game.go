@@ -18,12 +18,12 @@ func (g *Game) AddNewGame(db *sql.DB) error {
 
 	stmt, err := db.Prepare("INSERT INTO Games (personId, levelId) VALUES (?, ?)")
 	if err != nil {
-		panic(err.Error())
+		return err
 	}
 
 	_, err = stmt.Exec(g.PersonID, g.Level)
 	if err != nil {
-		panic(err.Error())
+		return err
 	}
 
 	return nil
@@ -35,17 +35,17 @@ func (gt *GameTrack) RegisterGameAnswer(db *sql.DB) (bool, error) {
 	result, err := gt.getAnswerConfirmation(db)
 
 	if err != nil {
-		panic(err.Error())
+		return false, err
 	}
 
 	stmt, err := db.Prepare("INSERT INTO GameTrack (gameId, peopleId, peopleQuestionId, result) VALUES (?,?,?,?)")
 	if err != nil {
-		panic(err.Error())
+		return false, err
 	}
 
 	_, err = stmt.Exec(gt.GameID, gt.PeopleID, gt.PeopleQuestionID, result)
 	if err != nil {
-		panic(err.Error())
+		return false, err
 	}
 
 	return result, nil

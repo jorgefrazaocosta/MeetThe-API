@@ -2,7 +2,6 @@ package legends
 
 import (
 	"database/sql"
-	"net/http"
 
 	database "api.meet.the/components/database"
 	"api.meet.the/components/response"
@@ -21,10 +20,10 @@ func GetLegends(c echo.Context) error {
 
 		switch err {
 		case sql.ErrNoRows:
-			return response.ErrorBadRequestWithKey(c, "User.Error.NotFound")
+			return response.ErrorBadRequestWithKey(c, "SQL.Error.NoRows")
 		}
 
-		return c.JSON(http.StatusBadRequest, err.Error())
+		return response.ErrorBadRequestWithKey(c, "Application.Error.Unknown")
 
 	}
 

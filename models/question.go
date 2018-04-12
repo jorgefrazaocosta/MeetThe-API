@@ -42,7 +42,7 @@ func (q *Question) GetRandomQuestion(user int, level int, db *sql.DB) error {
 	results, err := db.Query("SELECT pq.id FROM PeopleQuestions pq, Questions q, QuestionsLevel ql WHERE pq.questionId = q.id AND q.id = ql.questionId AND peopleId != ? AND ql.levelId = ?", user, level)
 
 	if err != nil {
-		panic(err.Error())
+		return err
 	}
 
 	for results.Next() {
@@ -52,7 +52,7 @@ func (q *Question) GetRandomQuestion(user int, level int, db *sql.DB) error {
 		err = results.Scan(&questionId)
 
 		if err != nil {
-			panic(err.Error())
+			return err
 		}
 
 		questionsIds = append(questionsIds, questionId)
@@ -62,7 +62,7 @@ func (q *Question) GetRandomQuestion(user int, level int, db *sql.DB) error {
 	q.PeopleQuestionID = random(questionsIds)
 
 	if err := q.GetQuestion(db); err != nil {
-		panic(err.Error())
+		return err
 	}
 
 	return nil
@@ -74,7 +74,7 @@ func (q *Question) GetUnansweredQuestion(questionFail int, db *sql.DB) error {
 	err := q.getPeopleFromQuestion(questionFail, db)
 
 	if err != nil {
-		panic(err.Error())
+		return err
 	}
 
 	var questionsIds []int
@@ -82,7 +82,7 @@ func (q *Question) GetUnansweredQuestion(questionFail int, db *sql.DB) error {
 	results, err := db.Query("SELECT DISTINCT(q.id) FROM Questions q LEFT JOIN PeopleQuestions pq ON pq.questionId = q.id WHERE pq.peopleId != ?", q.Person.ID)
 
 	if err != nil {
-		panic(err.Error())
+		return err
 	}
 
 	for results.Next() {
@@ -92,7 +92,7 @@ func (q *Question) GetUnansweredQuestion(questionFail int, db *sql.DB) error {
 		err = results.Scan(&questionId)
 
 		if err != nil {
-			panic(err.Error())
+			return err
 		}
 
 		questionsIds = append(questionsIds, questionId)
@@ -102,7 +102,7 @@ func (q *Question) GetUnansweredQuestion(questionFail int, db *sql.DB) error {
 	q.QuestionID = random(questionsIds)
 
 	if err := q.GetQuestionDescription(db); err != nil {
-		panic(err.Error())
+		return err
 	}
 
 	return nil
@@ -116,7 +116,7 @@ func (q *Question) getAnswers(db *sql.DB) ([]Answer, error) {
 	results, err := db.Query("SELECT id, answer FROM Answers WHERE questionPeopleId = ?", q.PeopleQuestionID)
 
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
 
 	for results.Next() {
@@ -126,7 +126,7 @@ func (q *Question) getAnswers(db *sql.DB) ([]Answer, error) {
 		err = results.Scan(&answer.ID, &answer.Answer)
 
 		if err != nil {
-			panic(err.Error())
+			return nil, err
 		}
 
 		answers = append(answers, answer)

@@ -16,7 +16,7 @@ func (p *Legend) GetLegends(db *sql.DB) ([]Legend, error) {
 
 	results, err := db.Query("SELECT p.id, p.name, i.url FROM People p, Images i WHERE p.photoID = i.id AND p.active = 1 ORDER BY name ASC")
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
 
 	for results.Next() {
@@ -26,7 +26,7 @@ func (p *Legend) GetLegends(db *sql.DB) ([]Legend, error) {
 		err = results.Scan(&legend.ID, &legend.Name, &legend.PhotoURL)
 
 		if err != nil {
-			panic(err.Error())
+			return nil, err
 		}
 
 		legends = append(legends, legend)

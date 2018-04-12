@@ -13,5 +13,30 @@
         "locale": "pt",
         "key": "Application.Error.Unknown",
         "trans": "Ocorreu um erro inesperado."
+    },
+    {
+        "locale": "pt",
+        "key": "SQL.Error.NoRows",
+        "trans": "Infelizmente não encontramos registos."
+    },
+    {
+        "locale": "pt",
+        "key": "Application.Validation.Error",
+        "trans": "Verifica novamente a informação enviada."
+    },
+    {
+        "locale": "pt",
+        "key": "Add.New.Game.Error",
+        "trans": "Não foi possível criar um novo jogo. Porquê? Perguntas bem? Isto não era suposto."
+    },
+    {
+        "locale": "pt",
+        "key": "Register.User.Response.Error",
+        "trans": "Não conseguimos registar a tua resposta. Será que ganhaste uma segunda oportunidade?"
+    },
+    {
+        "locale": "pt",
+        "key": "Get.Unanswered.Question.Error",
+        "trans": "Falhaste, mas escapas-te de boa, não temos nenhuma pergunta descobrir neste momento."
     }
 ]

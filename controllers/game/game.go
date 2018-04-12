@@ -1,9 +1,6 @@
 package game
 
 import (
-	"database/sql"
-	"net/http"
-
 	"api.meet.the/components/database"
 	"api.meet.the/components/response"
 	"api.meet.the/components/validator"
@@ -20,20 +17,13 @@ func AddGame(c echo.Context) error {
 	}
 
 	if err := validator.ValidateStruct(c, g); err != nil {
-		return c.JSON(http.StatusBadRequest, err)
+		return response.ErrorBadRequestWithKey(c, "Application.Validation.Error")
 	}
 
 	err := g.AddNewGame(database.DB)
 
 	if err != nil {
-
-		switch err {
-		case sql.ErrNoRows:
-			return response.ErrorBadRequestWithKey(c, "User.Error.NotFound")
-		}
-
-		return c.JSON(http.StatusBadRequest, err.Error())
-
+		return response.ErrorBadRequestWithKey(c, "Add.New.Game.Error")
 	}
 
 	return response.Success(c, true)
@@ -49,20 +39,13 @@ func RegisterQuestionResult(c echo.Context) error {
 	}
 
 	if err := validator.ValidateStruct(c, gt); err != nil {
-		return c.JSON(http.StatusBadRequest, err)
+		return response.ErrorBadRequestWithKey(c, "Application.Validation.Error")
 	}
 
 	result, err := gt.RegisterGameAnswer(database.DB)
 
 	if err != nil {
-
-		switch err {
-		case sql.ErrNoRows:
-			return response.ErrorBadRequestWithKey(c, "User.Error.NotFound")
-		}
-
-		return c.JSON(http.StatusBadRequest, err.Error())
-
+		return response.ErrorBadRequestWithKey(c, "Register.User.Response.Error")
 	}
 
 	if result {
@@ -70,7 +53,11 @@ func RegisterQuestionResult(c echo.Context) error {
 	}
 
 	q := new(model.Question)
-	q.GetUnansweredQuestion(gt.PeopleQuestionID, database.DB)
+	err = q.GetUnansweredQuestion(gt.PeopleQuestionID, database.DB)
+
+	if err != nil {
+		return response.ErrorBadRequestWithKey(c, "Get.Unanswered.Question.Error")
+	}
 
 	// Also send email to user and to admin
 

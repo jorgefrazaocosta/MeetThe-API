@@ -13,7 +13,7 @@ func (l *Level) GetLevels(db *sql.DB) ([]Level, error) {
 
 	results, err := db.Query("SELECT id, description FROM Levels ORDER BY sort")
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
 
 	for results.Next() {
@@ -23,7 +23,7 @@ func (l *Level) GetLevels(db *sql.DB) ([]Level, error) {
 		err = results.Scan(&level.LevelID, &level.Description)
 
 		if err != nil {
-			panic(err.Error())
+			return nil, err
 		}
 
 		levels = append(levels, level)
