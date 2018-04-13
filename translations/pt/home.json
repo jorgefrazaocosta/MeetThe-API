@@ -37,6 +37,6 @@
     {
         "locale": "pt",
         "key": "Get.Unanswered.Question.Error",
-        "trans": "Falhaste, mas escapas-te de boa, não temos nenhuma pergunta descobrir neste momento."
+        "trans": "Falhaste, mas escapas-te de boa, não temos nenhuma pergunta sem resposta neste momento."
     }
 ]
